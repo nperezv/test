@@ -1,0 +1,114 @@
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex> curl.exe -i http://127.0.0.1:8080/api/health
+HTTP/1.1 200 OK
+content-type: application/json; charset=utf-8
+content-length: 15
+Date: Thu, 30 Jul 2026 14:16:42 GMT
+Connection: keep-alive
+Keep-Alive: timeout=72
+{"status":"ok"}
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex> curl.exe -i http://127.0.0.1:8080/api/apps
+HTTP/1.1 401 Unauthorized
+content-type: application/json; charset=utf-8
+content-length: 32
+Date: Thu, 30 Jul 2026 14:16:46 GMT
+Connection: keep-alive
+Keep-Alive: timeout=72
+{"error":"Sign in to continue."}
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex>
+
+Mostrar más
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex> curl.exe -i -H "Authorization: Bearer $t" http://127.0.0.1:8080/api/apps
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 2017 ms: Could not connect to server
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex> $t.Length
+1290
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex> curl.exe -s -X POST http://localhost:8081/realms/corex-lab/protocol/openid-connect/token -d "client_id=corex-lab-web" -d "username=nelson" -d "password=corex-dev" -d "grant_type=password"
+{"access_token":"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJZYzNWQkwzN1g5Y0pKeDA2WGdpUGItalJTS01FeDY4Yy1YVFFkZEgwVWE0In0.eyJleHAiOjE3ODU0MjIzNDksImlhdCI6MTc4NTQyMTQ0OSwianRpIjoiOTdhNDM1MzAtYzM4NC00ODBlLTg5YjYtMGU4MmIxNDExOGU1IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgxL3JlYWxtcy9jb3JleC1sYWIiLCJhdWQiOiJjb3JleC1sYWItYXBpIiwic3ViIjoiODUzZGQ4YjUtZTIwNy00ODI3LWFmOGYtYjk0OGFlYTkwYjBlIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiY29yZXgtbGFiLXdlYiIsInNpZCI6IjQ3ZTY4MmIzLTFkNTItNDlmZC1iNGQyLWU1ZmRmM2MyMTU3YSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDo1MTczIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJhdXRvbWF0aW9uLnRlbXBsYXRlLmVkaXQiLCJhdXRvbWF0aW9uLnJ1bi5sYXVuY2giLCJ0ZWFtOmdpdG8tbGludXgiLCJhdXRvbWF0aW9uLnRlbXBsYXRlLnZpZXciXX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiTmVsc29uIFBlcmV6IiwicHJlZmVycmVkX3VzZXJuYW1lIjoibmVsc29uIiwiZ2l2ZW5fbmFtZSI6Ik5lbHNvbiIsImZhbWlseV9uYW1lIjoiUGVyZXoiLCJlbWFpbCI6Im5lbHNvbkBleGFtcGxlLmxvY2FsIn0.MzFwy-uQyoUaMq717TsgJ_uxxB6YyghqNvAya2LVf8FfsoQH52QoRQbcgAEK2BOHg74R9eneY3KTgFQ9je1OTqCh2LFI_DgJDyp67cYfOaKOLicNxmwsbZNQ06z9tpAXSg6SDUCEErE8sUZD9xhrYTOC7ftW5Q-7ML44WEqLLgcdtbFPyNARsfKW6uEyEx_1RAjs7OGcAmzBr8QT_qN9ine0qDBii7w9Hn5ulBf6FBDgQbkhvq3hkohXqD5PldhpRBivueGlC1Otj_xOM0dhur5f6t8Cgunxrv_p-WLKk6Dl33E4YCgPtikKPXrN2mZH2CFR4w9IAUwg-YT3BctUFw","expires_in":900,"refresh_expires_in":3600,"refresh_token":"eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3MzdhYTg3OC0yNWZmLTRlMWUtODY2NC05OTkwMTNhOWNiNzMifQ.eyJleHAiOjE3ODU0MjUwNDksImlhdCI6MTc4NTQyMTQ0OSwianRpIjoiNzNhOThmNDAtYjE0Yi00YWE5LWE1NTItYjY1OGQ3N2E4ZmU2IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgxL3JlYWxtcy9jb3JleC1sYWIiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjgwODEvcmVhbG1zL2NvcmV4LWxhYiIsInN1YiI6Ijg1M2RkOGI1LWUyMDctNDgyNy1hZjhmLWI5NDhhZWE5MGIwZSIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJjb3JleC1sYWItd2ViIiwic2lkIjoiNDdlNjgyYjMtMWQ1Mi00OWZkLWI0ZDItZTVmZGYzYzIxNTdhIiwic2NvcGUiOiJiYXNpYyBlbWFpbCB3ZWItb3JpZ2lucyBhY3IgcHJvZmlsZSByb2xlcyJ9.TuGVqICvwJwMgdr8inbaoLWKPuus7bQlJLrZ2Z6YXXbjMH-3dHkhO2fQzHPlLtNJdln8s-CW-_2XK-lzeTPmKA","token_type":"Bearer","not-before-policy":0,"session_state":"47e682b3-1d52-49fd-b4d2-e5fdf3c2157a","scope":"email profile"}
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex>
+
+[root@SOLNB-DP56S64 corex-lab]# docker compose -f docker-compose.dev.yml up -d --force-recreate keycloak
+docker compose -f docker-compose.dev.yml logs -f keycloak | grep -i "import\|realm"
+[+] Running 1/1
+ ✔ Container corex-lab-keycloak-1  Started                                                                                0.7s
+keycloak-1  | 2026-07-30 14:23:07,302 INFO  [org.keycloak.services] (main) KC-SERVICES0050: Initializing master realm
+keycloak-1  | 2026-07-30 14:23:08,571 INFO  [org.keycloak.exportimport.dir.DirImportProvider] (main) Importing from directory /opt/keycloak/bin/../data/import
+keycloak-1  | 2026-07-30 14:23:08,571 INFO  [org.keycloak.services] (main) KC-SERVICES0030: Full model import requested. Strategy: IGNORE_EXISTING
+keycloak-1  | 2026-07-30 14:23:09,753 INFO  [org.keycloak.exportimport.util.ImportUtils] (main) Realm 'corex-lab' imported
+keycloak-1  | 2026-07-30 14:23:09,840 INFO  [org.keycloak.services] (main) KC-SERVICES0032: Import finished successfully
+
+Mostrar más
+
+Diagnosed API connectivity issue and validated authentication setup
+Diagnosed API connectivity issue and validated authentication setup
+El token está perfecto: aud: corex-lab-api y los cuatro roles dentro. Keycloak hecho.
+
+El API simplemente no está corriendo: lanzaste los comandos de compose en la misma shell donde vivía npm run dev:api, así que lo mataste, y ahora esa shell está enganchada al logs -f.
+
+Ctrl+C para soltar los logs, y arranca el API en una ventana aparte de WSL:
+
+bash
+cd /path/to/corex-lab
+set -a; source .env; set +a
+npm run dev:api
+Esa ventana ya no se toca. Todo lo demás, en otra.
+
+Cuando veas Server listening, repite el curl desde PowerShell. El token caduca a los 900 segundos, así que si tardas, vuelve a pedirlo antes.
+
+Y el que quieres ver de verdad, con readonly:
+
+powershell
+$r = (curl.exe -s -X POST http://localhost:8081/realms/corex-lab/protocol/openid-connect/token -d "client_id=corex-lab-web" -d "username=readonly" -d "password=corex-dev" -d "grant_type=password" | ConvertFrom-Json).access_token
+
+curl.exe -i -H "Authorization: Bearer $r" http://127.0.0.1:8080/api/apps/automation/templates
+curl.exe -i -X POST -H "Authorization: Bearer $r" -H "Content-Type: application/json" -d "{}" http://127.0.0.1:8080/api/apps/automation/templates
+200 el primero, 403 el segundo. Si el POST te devuelve 400 en vez de 403, mal: significa que ha pasado el control de permisos y ha llegado a la validación. El orden importa.
+
+Un detalle del import que te va a morder más adelante: la estrategia es IGNORE_EXISTING. Si editas el JSON del realm y recreas el contenedor, no se aplica nada — Keycloak ve que corex-lab ya existe y pasa de largo. Para forzarlo, docker compose down -v keycloak (se lleva el volumen) o añade --override al comando de import.
+
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex> $r = (curl.exe -s -X POST http://localhost:8081/realms/corex-lab/protocol/openid-connect/token -d "client_id=corex-lab-web" -d "username=readonly" -d "password=corex-dev" -d "grant_type=password" | ConvertFrom-Json).access_token
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex>
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex> curl.exe -i -H "Authorization: Bearer $r" http://127.0.0.1:8080/api/apps/automation/templates
+HTTP/1.1 401 Unauthorized
+content-type: application/json; charset=utf-8
+content-length: 32
+Date: Thu, 30 Jul 2026 14:25:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=72
+{"error":"Sign in to continue."}
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex> curl.exe -i -X POST -H "Authorization: Bearer $r" -H "Content-Type: application/json" -d "{}" http://127.0.0.1:8080/api/apps/automation/templates
+HTTP/1.1 401 Unauthorized
+content-type: application/json; charset=utf-8
+content-length: 32
+Date: Thu, 30 Jul 2026 14:25:17 GMT
+Connection: keep-alive
+Keep-Alive: timeout=72
+{"error":"Sign in to continue."}
+PS C:\Users\Nelson.Perez\OneDrive - Solera Holdings, Inc\Documents\Projects\corex>
+
+Mostrar más
+
+Diagnosed JWT verification failure, pinpointed logging gap as culprit
+Diagnosed JWT verification failure, pinpointed logging gap as culprit
+El API responde, así que está vivo — es la verificación del token la que falla. Y aquí tengo un fallo de diseño mío: puse un catch mudo, así que cualquier causa (token vacío, issuer que no cuadra, JWKS inalcanzable) produce el mismo 401 y no hay forma de saber cuál es. Eso lo arreglamos primero.
+
+En apps/api/src/platform/identity/auth.ts, sustituye el catch:
+
+ts
+    } catch (err) {
+      req.log.warn({ err: (err as Error).message }, 'Token rejected');
+      await reply.code(401).send({ error: 'Your session has expired. Sign in again.' });
+    }
+Y antes de repetir, comprueba lo más tonto:
+
+powershell
+$r.Length
+Si sale 0, el token de readonly no se pidió bien y estás mandando Bearer  vacío — que da exactamente este mismo 401. Prueba con $t, que ya sabes que tiene 1290 caracteres.
+
+Con el log puesto, repite el curl y mira la ventana de WSL. El mensaje te dice la causa directamente:
+
+"unexpected "iss" claim value" → el KEYCLOAK_ISSUER del .env no coincide con el iss del token
+"unexpected "aud" claim value" → el mapper de audiencia
+fetch failed / ERR_JWKS_... → el API no alcanza localhost:8081 desde WSL para bajar las claves
+"exp" claim timestamp check failed → caducó, pide otro
+Mi apuesta está entre el token vacío y el fetch failed del JWKS. Pásame la línea del log y lo cerramos.
+
+sustiotuyelo y damelo para pone
