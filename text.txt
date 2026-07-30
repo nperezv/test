@@ -1,0 +1,493 @@
+COREX Lab - Prompt Maestro del Proyecto
+Visión del Proyecto
+
+COREX Lab será una plataforma web empresarial desarrollada para centralizar todas las herramientas, automatizaciones y procesos operativos del equipo de Infraestructura.
+
+No es una migración de COREX Desktop a una aplicación web. Es la evolución del producto hacia una plataforma moderna, escalable, mantenible y preparada para crecer durante muchos años.
+
+La aplicación se desplegará inicialmente sobre Rocky Linux 9 / RHEL 9 y deberá poder ejecutarse como servicio mediante systemd, detrás de Nginx y preparada para producción.
+
+Situación actual
+
+Se dispone del código fuente completo de COREX Desktop (Electron), que ha sido auditado previamente.
+
+La auditoría ha permitido identificar:
+
+Integraciones existentes con Jira.
+Integraciones con AWX.
+Integraciones con Icinga.
+Gestión de credenciales.
+Automatizaciones Lifecycle.
+Gestión de inventarios.
+Notificaciones Microsoft Teams.
+Automatizaciones varias desarrolladas durante los últimos años.
+
+Todo el conocimiento funcional existente debe reutilizarse siempre que sea posible.
+
+No se reutilizará la arquitectura Electron.
+
+Únicamente se reutilizará la lógica de negocio.
+
+Objetivo principal
+
+Construir una plataforma web moderna denominada COREX Lab donde todas las herramientas compartan una arquitectura común.
+
+Debe ser un producto fácilmente mantenible por cualquier engineer que se incorpore al proyecto.
+
+La prioridad absoluta será:
+
+mantenibilidad
+modularidad
+escalabilidad
+seguridad
+facilidad de incorporación de nuevas funcionalidades
+
+Nunca se sacrificarán estos principios.
+
+Filosofía
+
+COREX Lab no estará formado por módulos rígidos.
+
+Estará compuesto por Apps.
+
+Ejemplos:
+
+Lifecycle
+PatchForge
+Server Onboarding
+Inventory
+Reports
+Compliance
+Cualquier App futura
+
+Todas compartirán los servicios comunes de la plataforma.
+
+Servicios comunes
+
+La plataforma deberá proporcionar servicios reutilizables para todas las Apps.
+
+Como mínimo:
+
+Autenticación
+LDAP / Active Directory
+Keycloak (OIDC)
+Usuarios
+Roles
+Permisos (RBAC)
+Auditoría
+Notificaciones
+Integraciones
+Gestión de credenciales
+Centro de mensajes
+Centro de notificaciones
+Workload Engine
+Duty Manager
+Configuración
+
+Las Apps nunca implementarán estos servicios por separado.
+
+Arquitectura
+
+Backend:
+
+Node.js + TypeScript
+
+Frontend:
+
+React + TypeScript + Vite
+
+Base de datos:
+
+PostgreSQL
+
+Cache y colas:
+
+Redis
+
+Reverse Proxy:
+
+Nginx
+
+Sistema operativo:
+
+Rocky Linux 9 / RHEL 9
+
+Servicios:
+
+systemd
+
+Contenedores para desarrollo:
+
+Docker Compose
+
+Arquitectura del código
+
+La arquitectura será por dominio.
+
+Nunca por tipo de archivo.
+
+Cada dominio deberá ser completamente independiente.
+
+No se permitirán dependencias circulares.
+
+No existirán carpetas tipo:
+
+helpers
+
+misc
+
+utils
+
+new
+
+common2
+
+temp
+
+Cada responsabilidad deberá estar perfectamente localizada.
+
+Sistema de Apps
+
+Cada App deberá disponer de:
+
+API
+
+Servicios
+
+Persistencia
+
+Modelos
+
+Permisos
+
+Rutas
+
+Interfaz
+
+Pruebas
+
+Documentación
+
+Manifest
+
+El objetivo es que añadir una nueva App sea una operación sencilla y sin modificar el núcleo de COREX Lab.
+
+Integración con Icinga
+
+La integración con Icinga tendrá como objetivo gestionar alertas operativas.
+
+El flujo será:
+
+Icinga
+
+↓
+
+Webhook
+
+↓
+
+COREX Lab
+
+↓
+
+Workload Engine
+
+↓
+
+Asignación automática
+
+↓
+
+Microsoft Teams
+
+Las alertas deberán seguir mostrándose en el dashboard operativo.
+
+Cuando llegue una alerta:
+
+deberá determinarse automáticamente el ingeniero más adecuado
+deberá enviarse la notificación al grupo de Teams
+deberá quedar registrada la asignación
+deberá notificarse al manager
+Integración con Jira
+
+COREX Lab gestionará el triage de tickets.
+
+Cuando llegue un ticket:
+
+será evaluado automáticamente
+podrá asignarse automáticamente
+podrá añadir comentarios
+podrá cambiar estados
+podrá aplicar reglas configurables
+
+El objetivo es repartir la carga entre el equipo.
+
+No será un simple visor de Jira.
+
+Será un motor inteligente de distribución de trabajo.
+
+Workload Engine
+
+Será el cerebro de asignación.
+
+Será utilizado tanto por Icinga como por Jira y por cualquier App futura.
+
+Tendrá en cuenta:
+
+disponibilidad
+carga actual
+especialidad
+equipo
+horario
+proyectos asignados
+reglas configurables
+prioridades
+permisos
+
+No utilizará reparto aleatorio.
+
+Todas las decisiones deberán ser explicables y auditables.
+
+Duty Manager
+
+Todos los ingenieros estarán disponibles por defecto.
+
+Cuando un ingeniero necesite dejar de recibir trabajo:
+
+Solicitará una indisponibilidad.
+
+La solicitud llegará automáticamente al manager.
+
+El manager podrá:
+
+aprobar
+rechazar
+modificar
+
+El manager también podrá cambiar directamente el estado de cualquier ingeniero sin necesidad de aprobación.
+
+Estados previstos:
+
+Disponible
+
+No disponible
+
+Vacaciones
+
+Baja
+
+Proyecto
+
+Formación
+
+Reunión
+
+Guardia (futuro)
+
+Las ausencias podrán programarse.
+
+Dashboard operativo
+
+La plataforma dispondrá de un panel global.
+
+Mostrará:
+
+Disponibilidad del equipo
+
+Carga del equipo
+
+Alertas Icinga
+
+Tickets Jira
+
+Estado de Apps
+
+Métricas
+
+Incidencias
+
+Actividad reciente
+
+KPIs
+
+Centro de notificaciones
+
+Existirá un centro unificado de notificaciones.
+
+Recibirá eventos procedentes de:
+
+Icinga
+
+Jira
+
+PatchForge
+
+Lifecycle
+
+Onboarding
+
+Sistema
+
+Usuarios
+
+Managers
+
+Todas las notificaciones quedarán registradas.
+
+Microsoft Teams
+
+Teams será un canal principal.
+
+Permitirá:
+
+Notificar alertas
+
+Notificar asignaciones
+
+Solicitudes de aprobación
+
+Cambios de disponibilidad
+
+Información operacional
+
+El objetivo es minimizar el número de accesos necesarios a la plataforma.
+
+Seguridad
+
+Autenticación mediante Keycloak.
+
+LDAP.
+
+RBAC.
+
+Auditoría completa.
+
+Gestión segura de credenciales.
+
+Protección frente a XSS.
+
+Protección frente a SSRF.
+
+Validación estricta de entradas.
+
+Logs de auditoría.
+
+No existirán secretos en frontend.
+
+Calidad
+
+Todo desarrollo deberá incluir:
+
+Documentación
+
+Pruebas
+
+Tipado estricto
+
+Lint
+
+Formateo automático
+
+Revisión de arquitectura
+
+Cobertura mínima
+
+No se aceptará deuda técnica innecesaria.
+
+Objetivo final
+
+COREX Lab deberá convertirse en la plataforma central utilizada diariamente por el equipo de Infraestructura para gestionar herramientas, automatizaciones, operaciones, incidencias y procesos internos desde una única interfaz moderna, segura y fácilmente mantenible, permitiendo incorporar nuevas Apps e integraciones sin comprometer la arquitectura del sistema.
+
+Este documento será nuestro contrato de arquitectura. A partir de él, cada decisión técnica deberá responder a una pregunta: "¿encaja con la visión de COREX Lab?". Si la respuesta es no, se rediseña antes de implementar.
+
+Además, te propondría crear dos documentos complementarios que nos van a ahorrar muchísimos problemas durante el desarrollo:
+
+COREX Lab Architecture Decision Records (ADR): un registro de todas las decisiones importantes (por qué elegimos React, Keycloak, PostgreSQL, cómo funciona el Workload Engine, etc.), para que cualquier engineer entienda el razonamiento detrás de la arquitectura.
+COREX Lab Developer Guide: una guía obligatoria para desarrollar nuevas Apps, con la estructura de carpetas, convenciones de nombres, buenas prácticas, requisitos de pruebas y checklist para que todas las contribuciones mantengan la misma calidad. De esa forma, aunque dentro de tres años haya varios desarrolladores trabajando en paralelo, la plataforma seguirá teniendo una arquitectura coherente y fácil de mantener.
+Y una cosa importante, me gusta cómo está el front ahora, ¿vale? Eso no lo quiero tocar, quiero que se mantenga exactamente igual, porque he luchado mucho para llegar a este punto, hablando del front.
+
+Eso cambia una decisión importante, y creo que es una muy buena noticia.
+
+No reharemos el frontend. Lo preservaremos.
+
+De hecho, lo añadiría como uno de los principios fundamentales del proyecto:
+
+El frontend actual de COREX es un activo del proyecto. No debe rediseñarse, sino migrarse y adaptarse a la nueva arquitectura.
+
+Yo haría una distinción clara:
+
+UX (experiencia de usuario): se mantiene.
+UI (aspecto visual): se mantiene.
+Arquitectura interna: se reconstruye.
+
+Es decir, cuando un usuario abra COREX Lab debería sentir que está usando la misma aplicación que conoce hoy, solo que ejecutándose en el navegador.
+
+Lo que sí cambiaría
+
+Por debajo, prácticamente todo.
+
+En lugar de:
+
+Botón
+   ↓
+IPC Electron
+   ↓
+main.js
+
+Pasaría a ser:
+
+Botón
+   ↓
+React
+   ↓
+REST / WebSocket
+   ↓
+COREX API
+
+Pero el botón, el icono, la distribución, los colores y el flujo seguirían siendo los mismos.
+
+De hecho, propongo una regla
+
+Durante la Fase 1 del proyecto:
+
+No se permitirá ningún cambio visual que no sea estrictamente necesario para adaptarlo a la web.
+
+Eso tiene varias ventajas:
+
+Los usuarios no tienen que volver a aprender la herramienta.
+Podemos centrarnos en la arquitectura y la funcionalidad.
+Si algo falla, sabemos que el problema es del backend y no de un rediseño de interfaz.
+Reducimos muchísimo el riesgo del proyecto.
+Solo haría pequeñas mejoras
+
+Sin cambiar la identidad visual, aprovecharía la migración para añadir cosas que ahora son difíciles en Electron, por ejemplo:
+
+Un menú lateral que pueda plegarse.
+Notificaciones en tiempo real.
+Estado de conexión (Jira, AWX, Icinga, etc.).
+Un centro de notificaciones persistente.
+Indicadores de carga.
+Soporte completo para varias pestañas del navegador.
+
+Pero siempre respetando el diseño actual.
+
+Lo añadiría al documento maestro
+
+Incluiría un apartado como este:
+
+Compatibilidad visual
+
+La interfaz de usuario actual de COREX se considera consolidada tras múltiples iteraciones y validaciones con los usuarios. Durante la migración a COREX Lab, el objetivo será preservar la experiencia visual y los flujos existentes. Los esfuerzos de desarrollo se centrarán en la arquitectura, escalabilidad, seguridad y mantenibilidad, evitando rediseños innecesarios. Cualquier mejora visual deberá ser incremental y nunca romper la identidad del producto.
+
+Y te diría una cosa más, que creo que es importante para el éxito del proyecto: antes de escribir una línea de código nueva, quiero hacer una ingeniería inversa completa del COREX actual.
+
+No para copiarlo, sino para documentarlo. Quiero extraer:
+
+Todos los flujos de usuario.
+Todas las pantallas.
+Todas las integraciones (Jira, AWX, Icinga, Teams, etc.).
+Todas las automatizaciones.
+Todas las reglas de negocio.
+Todas las dependencias entre funcionalidades.
+
+Con esa información elaboraremos un Functional Specification de COREX Lab. Ese documento será nuestra referencia para garantizar que, cuando demos el salto a la plataforma web, no perdamos ninguna funcionalidad que hoy aporta valor. Creo que es la forma más segura de evolucionar el producto sin romper lo que tanto trabajo te ha costado construir.
